@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/main_styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="header_content d-flex flex-row align-items-center justify-content-start">
+                    <div class="header_content_inner d-flex flex-row align-items-end justify-content-start">
+                        <div class="logo"><a href="{% url 'index'%}">AUTO KZ</a></div>
+                        <nav class="main_nav">
+                            <ul class="d-flex flex-row align-items-start justify-content-start">
+                                {% if user.is_authenticated %}
+                                <li style="color:white">Добро пожаловать,{{user.first_name}}</li>
+                                <li><a href="{% url 'personalCabinet'%}">Personal Cabinet</a></li>
+                                <li><a href="{% url 'logout'%}">Logout</a></li>
+                                {% else %}
+                                <li><a href="{% url 'register'%}">Register</a></li>
+                                <li><a href="{% url 'login'%}">Login</a></li>
+                                {% endif %}
+
+                            </ul>
+                        </nav>
+                        <div class="header_phone ml-auto">Тел: 8-702-000-00-05</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<body>
+<div class="login-page">
+    <div class="form">
+        <form action="login" method='post' class="login-form">
+            {% csrf_token %}
+            <div class="log">
+                <input type="text" name="username" placeholder="Логин"><br>
+                <input type="password" name="password" placeholder="Пароль"><br>
+                <button class="btn">Войти</button>
+                <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    {% for message in messages %}
+    <h3> {{message}} </h3>
+    {% endfor %}
+
+</div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% extends 'car.html' %}
+
+{% block title %}{{car.name}}{% endblock %}
+{% block content %}
+<div class="desc">
+    <div class="desc_show">
+        <img src="{{car.img.url}}" width="300"/>
+        <h4><span class="txt_desc">Марка: </span>{{car.name}}</h4>
+        <h4><span class="txt_desc">Модель: </span>{{car.model}}</h4>
+        <h4><span class="txt_desc">Год выпуска: </span>{{car.year}}</h4>
+        <h4><span class="txt_desc">Описание: </span>{{car.desc}}</h4>
+        <h4><span class="txt_desc">Цена: </span>{{car.price}}</h4>
+        <h4><span class="txt_desc">Дата публикации: </span>{{car.public_date}}</h4>
+        <form action="{% url 'delete_car' car.id %}" method="POST">
+            {% csrf_token %}
+            <button class="btn">Удалить машину</button>
+    </div>
+    </form>
+</div>
+<button class="btn" id="desc_btn"><a href="{% url 'index'%}">Вернуться на главную</a></button>
+<hr>
+<h2 style="color:#f39f18">Комментарии</h2>
+{% if lates_comments_list %}
+{% for c in lates_comments_list %}
+<p>
+    <strong style="color:white">{{c.comment_author_name}}</strong>
+<p style="color:#f2f2f2">{{c.comment_text}}</p>
+<hr align="left" width="150" color="#f39f18"/>
+</p>
+{% endfor %}
+{% else %}
+<h2 style="color:#f39f18">Написать первый комментарий</h2>
+{% endif %}
+<hr>
+<form action="{% url 'add_comment' car.id %}" method="POST">
+    {% csrf_token %}
+    <div class="comment">
+        <div class="desc_comment">
+            <input type="text" name="name" required placeholder="Имя"><br>
+            <textarea name="text" required="" placeholder="Текст комментария"></textarea><br>
+            <button class="btn">Оставить комментарий</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+

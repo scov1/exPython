@@ -1,0 +1,10 @@
+{% extends "car.html" %}
+{% load static %}
+
+{% block content_profile %}
+{% if profile.ava %}
+<p><img src="{{profile.ava.url}}"></p>
+{% endif %}
+<p>{{profile.phone}}</p>
+<p>{{profile.adress}}</p>
+{% endblock %}

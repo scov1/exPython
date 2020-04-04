@@ -1,0 +1,229 @@
+{% load static %}
+{% load i18n %}
+{% static "images" as baseUrl %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AUTO KZ</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/main_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<div class="super_container">
+    <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="header_content d-flex flex-row align-items-center justify-content-start">
+                        <div class="header_content_inner d-flex flex-row align-items-end justify-content-start">
+                            <div class="logo"><a href="{% url 'index'%}">AUTO KZ</a></div>
+                            <nav class="main_nav">
+                                <ul class="d-flex flex-row align-items-start justify-content-start">
+                                    {% if user.is_authenticated %}
+                                    <li style="color:white">Здравствуйте,{{user.first_name}}</li>
+                                    <li><a href="personalCabinet">Personal Cabinet</a></li>
+                                    <li><a href="accounts/logout">Logout</a></li>
+                                    {% else %}
+                                    <li><a href="accounts/register">Register</a></li>
+                                    <li><a href="accounts/login">Login</a></li>
+                                    {% endif %}
+                                    <li>
+                                        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+					                        <input name="next" type="hidden" value="{{ redirect_to }}">
+					                        <select name="language">
+					                            {% get_current_language as LANGUAGE_CODE %}
+					                            {% get_available_languages as LANGUAGES %}
+					                            {% get_language_info_list for LANGUAGES as languages %}
+					                            {% for language in languages %}
+					                                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %}
+					                                        selected{% endif %}>
+					                                    {{ language.name_local }} ({{ language.code }})
+					                                </option>
+					                            {% endfor %}
+					                        </select>
+					                        	<input type="submit" value="Go">
+					                   		</form>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <div class="header_phone ml-auto">Тел: 8-702-000-00-05</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="home">
+        <div class="home_slider_container">
+            <div class="owl-carousel owl-theme home_slider">
+                <div class="owl-item">
+                    <div class="background_image"
+                         style="background-image:url({% static 'images/header_background.jpg' %})"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="destinations" id="destinations">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="section_title"><h2>Хит-Продаж в Казахстане</h2></div>
+                </div>
+            </div>
+            <div class="row destinations_row">
+                <div class="col">
+                    <div class="destinations_container item_grid">
+                        {% for car in cars %}
+                        <div class="destination item">
+                            <div class="destination_image">
+                                <img src="{{car.img.url}}" alt="">
+                                {% if car.offer %}
+                                <div class="spec_offer text-center" style="height: 39px;width:107px;top:10px"><a
+                                        href="#" style="line-height:16px;font-size: 14px;">Специальное предложение</a>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="destination_content">
+                                <div class="destination_title"><a href="{% url 'detail' car.id %}">{{car.name}}</a>
+                                </div>
+                                <div class="destination_subtitle"><p>{{car.desc}}</p></div>
+                                <div class="destination_price">Цена ${{car.price}}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="testimonials" id="testimonials">
+        <div class="parallax_background parallax-window" data-parallax="scroll"
+             data-image-src="{% static 'images/testimonials.jpg' %}" data-speed="0.8"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="section_subtitle">F1 and coronavirus – what do we know so far?</div>
+                    <div class="section_title"><h2>What happened with the Australian Grand Prix?</h2></div>
+                </div>
+            </div>
+            <div class="row testimonials_row">
+                <div class="col">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="news" id="news">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-8">
+                    <div class="news_container">
+
+                        <div class="news_post d-flex flex-md-row flex-column align-items-start justify-content-start">
+                            <div class="news_post_image"><img src="{% static 'images/news1.jpg' %}" alt=""></div>
+                            <div class="news_post_content">
+                                <div class="news_post_date d-flex flex-row align-items-end justify-content-start">
+                                    <div>20</div>
+                                    <div>March</div>
+                                </div>
+                                <div class="news_post_title"><a href="#">Formula 1 gulf air bahrain GRAND PRIX 2020</a>
+                                </div>
+                                <div class="news_post_category">
+                                    <ul>
+                                        <li><a href="#">lifestyle & travel</a></li>
+                                    </ul>
+                                </div>
+                                <div class="news_post_text">
+                                    <p>The Bahrain and Vietnam Grands Prix have been postponed due to the continued
+                                        global spread of coronavirus.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="news_post d-flex flex-md-row flex-column align-items-start justify-content-start">
+                            <div class="news_post_image"><img src="{% static 'images/news2.jpg' %}" alt=""></div>
+                            <div class="news_post_content">
+                                <div class="news_post_date d-flex flex-row align-items-end justify-content-start">
+                                    <div>01</div>
+                                    <div>June</div>
+                                </div>
+                                <div class="news_post_title"><a href="#">DRIVER MARKET:First few races of 2020 key</a>
+                                </div>
+                                <div class="news_post_category">
+                                    <ul>
+                                        <li><a href="#">lifestyle & travel</a></li>
+                                    </ul>
+                                </div>
+                                <div class="news_post_text">
+                                    <p>Renault’s chances of keeping hold of Daniel Ricciardo beyond the end of 2020 will
+                                        depend on how competitive the team look in the first few Grands Prix of the
+                                        year.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="news_post d-flex flex-md-row flex-column align-items-start justify-content-start">
+                            <div class="news_post_image"><img src="{% static 'images/news_3.jpg' %}" alt=""></div>
+                            <div class="news_post_content">
+                                <div class="news_post_date d-flex flex-row align-items-end justify-content-start">
+                                    <div>29</div>
+                                    <div>may</div>
+                                </div>
+                                <div class="news_post_title"><a href="#">Best tips to travel light</a></div>
+                                <div class="news_post_category">
+                                    <ul>
+                                        <li><a href="#">lifestyle & travel</a></li>
+                                    </ul>
+                                </div>
+                                <div class="news_post_text">
+                                    <p>Vivamus massa.Tempor massa et laoreet malesuada. Aliquam nulla nisl, accumsan sit
+                                        amet mattis.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-xl-4">
+                    <div class="travello">
+                        <div class="background_image"
+                             style="{% static 'background-image:url(images/travello.jpg)' %}"></div>
+                        <div class="travello_content">
+                            <div class="travello_content_inner">
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                        <div class="travello_container">
+                            <a href="#">
+                                <div class="d-flex flex-column align-items-center justify-content-end">
+                                    <span class="travello_title">Get a 20% Discount</span>
+                                    <span class="travello_subtitle">Buy Your Vacation Online Now</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+    <script src="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.js' %}"></script>
+    <script src="{% static 'plugins/Isotope/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'plugins/parallax-js-master/parallax.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+</body>
+</html>
